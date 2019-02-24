@@ -17,6 +17,34 @@ function testPropietary(req, res) {
     });
 }
 
+function updatePropietary(req, res) {
+  var propietaryId = req.params.id;
+  var update = req.body;
+
+  conection.connect(function(err) {
+      if(err) {
+          res.status(500).send({message: 'Error de conexion'});
+          return;
+      }
+
+      var sql = "UPDATE propietario SET name = ?, address = ?, email = ?, telephone = ? WHERE id = ?";
+
+      conection.query(sql, [update.name, update.address, update.email, update.telephone, propietaryId],function (err, result) {
+          if (err) {
+              res.status(500).send({message: 'Update error'});
+              return;
+          }
+
+          res.send({
+              message: 'Success'
+          });
+
+      });
+      conection.end();
+  });
+}
+
 module.exports = {
-  testPropietary
+  testPropietary,
+  updatePropietary
 }
